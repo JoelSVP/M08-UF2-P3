@@ -87,6 +87,7 @@
                 android:backgroundTint="@color/colorPrimaryDark"
                 android:text="ACCEDER" />
         </LinearLayout>
+
     </LinearLayout>
 
     <TextView

@@ -53,15 +53,13 @@ public class AuthActivity extends AppCompatActivity {
 
         collection.get().addOnSuccessListener(queryDocumentSnapshots -> {
             int documentCount = queryDocumentSnapshots.size();
-            //Log.d("TAGGGG", "Number of documents: " + documentCount);
             if (documentCount <= 2) {
-                //Log.d("TAGGGG", "Setting up...");
                 setup();
             } else {
                 Toast.makeText(getBaseContext(), "Alcanzado el maximo de cuentas: 2", Toast.LENGTH_SHORT).show();
-                //Log.d("TAGGGG", "Alcanzado el maximo de cuentas: 2");
             }
         }).addOnFailureListener(e -> {
+            Toast.makeText(getBaseContext(), "Error", Toast.LENGTH_SHORT).show();
             Log.e("Error", "Error getting document count: " + e.getMessage());
         });
 
@@ -90,19 +88,19 @@ public class AuthActivity extends AppCompatActivity {
             @SuppressLint("RestrictedApi")
             @Override
             public void onClick(View v) {
-
                 String email = editTextEmail.getText().toString();
                 String password = editTextPass.getText().toString();
 
                 if (email.isEmpty() || password.isEmpty()) {
                     Toast.makeText(AuthActivity.this, "Los campos no pueden estar vacios", Toast.LENGTH_SHORT).show();
                 } else {
-                    // Toast para saber que pasa.
-                    // Toast for know the state of the authentication
-                    Toast.makeText(AuthActivity.this, "Registrando usuario...", Toast.LENGTH_SHORT).show();
-                    // Metodo para registrarse e iniciar sesion.
-                    // Method or function for registering and logging in
-                    registerUser(email, password);
+                    // TODO Añadir control de errores
+                    if (email.contains("@")){
+                        // Toast for know the state of the authentication
+                        Toast.makeText(AuthActivity.this, "Registrando usuario...", Toast.LENGTH_SHORT).show();
+                        // Method or function for registering and logging in
+                        registerUser(email, password);
+                    }
                 }
             }
         });
@@ -131,11 +129,9 @@ public class AuthActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            startActivity(new Intent(AuthActivity.this, MapsActivity.class));
+
 
                             // TOKEN
-
-
                             FirebaseUser user = task.getResult().getUser();
                             user.getIdToken(true)
                                     .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
@@ -144,6 +140,7 @@ public class AuthActivity extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<GetTokenResult> task) {
                                             String idToken = task.getResult().getToken();
                                             Log.d("TAG", "onComplete: " + idToken);
+                                            startActivity(new Intent(AuthActivity.this, MapsActivity.class));
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
@@ -169,7 +166,6 @@ public class AuthActivity extends AppCompatActivity {
     }
 
     private void registerUser(String email, String password) {
-
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -184,14 +180,12 @@ public class AuthActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(Void unused) {
                                 if (task.isSuccessful()) {
-                                    // Registrar usuario
                                     // Register the user
                                     startActivity(new Intent(AuthActivity.this, MapsActivity.class));
                                     finish();
 
                                     Toast.makeText(AuthActivity.this, "Bienvenido", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    // Si falla envia mensaje de error
                                     // If it fails, it sends an error message
                                     Toast.makeText(AuthActivity.this, "Registro fallido", Toast.LENGTH_SHORT).show();
                                 }

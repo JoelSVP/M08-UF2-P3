@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.io.File;
 
 public class FullImageActivity extends AppCompatActivity {
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
