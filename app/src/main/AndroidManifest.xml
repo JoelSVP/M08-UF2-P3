@@ -20,6 +20,10 @@
         android:theme="@style/Theme.M08_UF2_P3_FatimaFirdawsi_JoelVinansaca"
         tools:targetApi="31">
 
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
+
         <activity android:name=".FullImageActivity"/>
         <activity android:name=".MapsActivity"/>
         <activity android:name=".AuthActivity"/>
